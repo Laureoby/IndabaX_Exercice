@@ -1,0 +1,6 @@
+id,task,prompt,response,pertinence_0_2,suivi_instructions_0_2,comprehensibilite_0_2,justification
+1,question_answering,"Ni iki cyiza...","Iyo umuntu afite umuriro mwinshi...",1,1,2,"Le modèle interprète 'umuriro mwinshi' comme 'forte motivation' au lieu de 'forte fièvre' ; conseils hors sujet médical."
+2,question_answering,"Sobanura muri make...","Kugira ngo ubuhinzi...",2,1,2,"Réponse pertinente mais tronquée à 256 tokens ; éléments clés mentionnés."
+3,summarization,"Shishoza iyi nkuru...","U Rwanda rwishyize...",2,2,2,"Résumé correct en 2 phrases, objectif + moyens + but."
+4,instruction_following,"Andika urutonde...","Dore ibintu bitatu...",2,2,1,"Liste de 3 éléments, mais vocabulaire parfois maladroit."
+5,instruction_following,"Vuga interuro imwe...","Dore interuro...",2,0,2,"Réponse pertinente mais trop longue (plusieurs phrases au lieu d'une)."

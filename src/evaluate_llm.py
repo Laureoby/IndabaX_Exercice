@@ -2,17 +2,18 @@ import json
 import time
 from llama_cpp import Llama
 
+# 1. Charger les prompts
 with open("data/llm_prompts.json", "r", encoding="utf-8") as f:
     prompts = json.load(f)
 
-print("Chargement du modèle LLM...")
+MODEL_PATH = "models/gemma-4-12b-it-UD-Q4_K_XL.gguf"
+
+print("Chargement du modèle GGUF...")
 llm = Llama(
-    #model_path="models/gemma-4-12b-it-qat-Q4_0.gguf",
-    model_path="models/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf",
-    n_ctx=2048,
-    n_threads=8,
-    n_gpu_layers=0,
-    chat_format="gemma",   # ← Ajouté ici, laisse llama.cpp gérer le template Gemma
+    model_path=MODEL_PATH,
+    n_ctx=2048,          # Contexte réduit pour économiser la RAM
+    n_threads=4,         # Ajustez selon votre CPU (nproc)
+    n_gpu_layers=0,      # CPU uniquement (pas de GPU détecté)
     verbose=False
 )
 print("Modèle chargé.")
@@ -20,48 +21,52 @@ print("Modèle chargé.")
 results = []
 
 for item in prompts:
-    start = time.time()
-    # ← Remplacé ici : utilise create_chat_completion au lieu d'un prompt brut
-    """ output = llm.create_chat_completion(
-        messages=[{"role": "user", "content": item['prompt']}],
-        max_tokens=200,
-        temperature=0.3,
-        repeat_penalty=1.3
-    ) """
-
-    output = llm.create_chat_completion(
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant. Always respond in Kinyarwanda. Do not use English."},
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant. Always respond in Kinyarwanda."},
         {"role": "user", "content": item['prompt']}
-    ],
-    max_tokens=200,
-    temperature=1.0,
-    top_p=0.95,
-    top_k=64,
-    repeat_penalty=1.08
+    ]
+
+    start = time.time()
+    try:
+        output = llm.create_chat_completion(
+        messages=messages,
+        max_tokens=256,
+        temperature=1.0,
+        top_p=0.95,
+        top_k=64
     )
-    
-    elapsed = time.time() - start
+        
+        elapsed = time.time() - start
 
-    response_text = output["choices"][0]["message"]["content"].strip()
-    tokens_generated = output["usage"]["completion_tokens"]
+        response_text = output["choices"][0]["message"]["content"].strip()
 
-    results.append({
-        "id": item["id"],
-        "task": item["task"],
-        "prompt": item["prompt"],
-        "expected_behavior": item["expected_behavior"],
-        "response": response_text,
-        "generation_time_s": round(elapsed, 2),
-        "tokens_generated": tokens_generated,
-        "tokens_per_second": round(tokens_generated / elapsed, 2) if elapsed > 0 else 0
-    })
+        results.append({
+            "id": item["id"],
+            "task": item["task"],
+            "prompt": item["prompt"],
+            "expected_behavior": item["expected_behavior"],
+            "response": response_text,
+            "generation_time_s": round(elapsed, 2)
+        })
 
-    print(f"\n--- Prompt {item['id']} ({item['task']}) ---")
-    print(f"Réponse : {response_text[:300]}")
-    print(f"Temps : {elapsed:.2f}s | Tokens : {tokens_generated}")
+        print(f"\n--- Prompt {item['id']} ---")
+        print(f"Réponse : {response_text[:300]}")
+        print(f"Temps : {elapsed:.2f}s")
 
-with open("results/llm_baseline.json", "w", encoding="utf-8") as f:
+    except Exception as e:
+        print(f"\n--- Prompt {item['id']} : ERREUR ---")
+        print(f"{type(e).__name__}: {e}")
+        results.append({
+            "id": item["id"],
+            "task": item["task"],
+            "prompt": item["prompt"],
+            "expected_behavior": item["expected_behavior"],
+            "response": None,
+            "error": f"{type(e).__name__}: {e}",
+            "generation_time_s": None
+        })
+
+with open("results/llm_baseline_transformers.json", "w", encoding="utf-8") as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 
-print("\nRésultats sauvegardés dans results/llm_baseline.json")
+print("\nRésultats sauvegardés dans results/llm_baseline_transformers.json")

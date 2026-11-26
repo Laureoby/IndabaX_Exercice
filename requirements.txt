@@ -1,0 +1,22 @@
+# Core ASR
+nemo_toolkit[asr]==2.7.0
+torch==2.15.0
+torchaudio==2.15.0
+soundfile==0.13.1
+librosa==0.11.0
+numpy<2.4
+
+# LLM (GGUF)
+llama-cpp-python>=0.3.38
+
+# Metrics and data handling
+jiwer==4.0.0
+pandas>=2.0.0
+psutil>=6.0.0
+
+# Interface
+gradio==6.32.0
+
+# Utilities
+huggingface_hub>=0.30.0
+datasets>=4.0.0
