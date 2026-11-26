@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "task": "question_answering",
+    "prompt": "Ni iki cyiza cyo gukora mu gihe umuntu afite umuriro mwinshi?",
+    "expected_behavior": "Donner des conseils pratiques et sûrs (boire de l'eau, consulter un médecin si persistant, etc.) sans diagnostic médical définitif."
+  },
+  {
+    "id": 2,
+    "task": "question_answering",
+    "prompt": "Sobanura muri make icyo ubuhinzi bw'imyumbati busaba kugira ngo bushyireho umusaruro mwiza.",
+    "expected_behavior": "Mentionner des éléments clés : terre fertile, eau suffisante, bonnes semences, lutte contre les maladies."
+  },
+  {
+    "id": 3,
+    "task": "summarization",
+    "prompt": "Shishoza iyi nkuru mu nteruro ebyiri: U Rwanda rwiyemeje kongera umusaruro w'ubuhinzi mu myaka itanu iri imbere. Leta izatangiza gahunda yo gufasha abahinzi kubona inyongeramusaruro n'imiti y'ubuhinzi ku giciro cyiza. Ibi bizafasha kugabanya ubukene mu byaro.",
+    "expected_behavior": "Résumer en 2 phrases : objectif d'augmenter la production agricole, moyens (intrants subventionnés), but (réduire la pauvreté)."
+  },
+  {
+    "id": 4,
+    "task": "instruction_following",
+    "prompt": "Andika urutonde rw'ibintu bitatu umunyeshuri akwiye gukora mbere y'ikizamini.",
+    "expected_behavior": "Produire une liste numérotée de 3 éléments (réviser, dormir suffisamment, arriver à l'heure, etc.)."
+  },
+  {
+    "id": 5,
+    "task": "instruction_following",
+    "prompt": "Vuga interuro imwe isobanura icyo 'ubuzima bwiza' busobanura ku muntu ugeze mu za bukuru.",
+    "expected_behavior": "Une seule phrase en kinyarwanda, pertinente pour une personne âgée (santé, famille, paix intérieure, etc.)."
+  }
+]

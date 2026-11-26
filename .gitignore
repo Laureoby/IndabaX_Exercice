@@ -1,0 +1,5 @@
+.venv/
+models/
+data/audio/
+__pycache__/
+*.gguf
